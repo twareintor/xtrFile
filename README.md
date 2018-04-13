@@ -1,0 +1,9 @@
+# xtrFile
+extract file from damaged/ defective media
+
+A part of a project I started long time ago to retrieve lost files on damaged media like Floppy, HDD, CD, tape. Only JPEG files (JFIF header)
+Note: In the meantime, the frame contains more data, like geo-coordinates and quite a thumbnail of the image, usually in JPEG format self - so, we have JPEG in JPEG that adds comlexity to the process, in the respect that we can have something like  "[BOF][......][BOF][...][EOF][............][EOF]"
+
+Reads raw disk sector as a single file (no intermediary storage) amd then outputs the result in separate file(s) in another media. Reads everything, regardless allocated or non-allocaed space, so, doesn't take care if there is an allocation table or not.
+
+This serves just for information.  NOT FULLY TESTED AND IMPLEMENTED (pre-Alpha)
