@@ -39,7 +39,7 @@ inline bool CXFileExists(const char *szFNm);
 
 int main()
 {
-	CXExtrFile()	
+	// CXExtrFile();	
 	return 0;
 }
 
