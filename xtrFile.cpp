@@ -3,7 +3,8 @@
 /**** *****************************************************************************************
 * PRE-ALPHA. NOT FULLY TESTED NOR IMPLEMENTED. 
 * SERVES AS EXAMPLE OLNY. PART OF ANOTHER PROJECT OR GROUP OF PROJECTS. ANY USE IN ANOTHER
-* PROJECT OR PURPOSE MAY REQUIRE DEEP INSPECTION AND MODIFICATIONS
+* PROJECT OR FOR ANOTHER PURPOSE MAY GET UNEXPECTED RESULTS. PLEASE USE CAREFULY AFTER DEEP
+* INSPECTION AND CONSISTENT ADAPTATION OR MODIFICATION THAT MAY BE NEEDED
 ***********************************************************************************************/
 #include <windows.h>
 #include <sys/stat.h>
