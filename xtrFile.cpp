@@ -7,7 +7,7 @@
 * INSPECTION AND CONSISTENT ADAPTATION OR MODIFICATION THAT MAY BE NEEDED
 ***********************************************************************************************/
 #include <windows.h>
-#include <sys/stat.h>
+#include <sys/stat.h> // to get the lenght (size) of a file
 
 #define MEGABYTE 	0x00100000				//     1.048.576	Bytes
 #define GIGABYTE	0x40000000				// 1.073.741.824	Bytes
@@ -18,22 +18,49 @@
 #define MBP_PACK	0x00000080				// 			 128
 #define LOG_FILP	"LOG_%04d.TXT"							// for logging, this time, in the program directory
 
-#define LOG_FILE	"x:\\tmq\\log_files\\LOG_%04d.TXT"		// for debug only
-#define TESTDISD	"\\\\.\\Y:"								// for debug only
-#define TESTDISK	"x:\\tnc\\all.arc.mie"					// for debug only
-#define TESTDISF	"\\\\.\\Y:"								// for debug only
-#define TESTPATH	""										// for debug only
-#define TESTRDSK	"x:\\tmq\\diskimage\\DISK%04d.REC"		// for debug only
-#define TESTRIMG	"x:\\tmq\\recovered\\XIMG%04d.JPG"		// for debug only
+#define LOG_FILE	"x:\\tmq\\log_files\\LOG_%04d.TXT"		// log file
+#define TESTDISD	"\\\\.\\Y:"					// disk to be tested
+#define TESTDISK	"x:\\tnc\\all.arc.mie"				// disk to be tested
+#define TESTDISF	"\\\\.\\Y:"					// disk to be tested
+#define TESTPATH	""						// Pattern for recovered files
+#define TESTRDSK	"x:\\tmq\\diskimage\\DISK%04d.REC"		// Pattern for recovered files
+#define TESTRIMG	"x:\\tmq\\recovered\\XIMG%04d.JPG"		// Pattern for recovered files
 
 
 
+/**
+ * Extracts file from damaged (allocation table of the) media to be inspected
+ */
 int CXExtrFile();
+
+/**
+ *  saves the recovered data in a file
+ */
 int CXSaveBufferInNewFile(const char* szPat, int iPos, char* szBuf, DWORD dwBytes);
+
+/**
+ * independent testing the result (return) of CXSaveBufferInNewFile()
+ */
 void TEST__CXSaveBufferInNewFile();
+
+/**
+ * loads the second parameter with the data read back from the media
+ */
 short CXReadSect(const char*, char*, LARGE_INTEGER*, DWORD, DWORD*);
+
+/**
+ * determines the amount (or limit) or data to be read
+ */
 DWORD CXBytesToBeRead(); 		// TO BE DEVELOPED: Actually returns the system available memory
+
+/**
+ * prints a specified text in a specified file, appends or creates new file - BOOL flag
+ */
 int CXLogPrint(const char*, int, const char*, BOOL);	// FOR DEBUG ONLY
+
+/**
+ * returns true if the (path/to/)filename "szFnm" exists
+ */
 inline bool CXFileExists(const char *szFNm);
 
 
