@@ -6,6 +6,7 @@
 * PROJECT OR FOR ANOTHER PURPOSE MAY GET UNEXPECTED RESULTS. PLEASE USE CAREFULY AFTER DEEP
 * INSPECTION AND CONSISTENT ADAPTATION OR MODIFICATION THAT MAY BE NEEDED
 ***********************************************************************************************/
+
 #include <windows.h>
 #include <sys/stat.h> // to get the lenght (size) of a file
 
@@ -27,7 +28,6 @@
 #define TESTRIMG	"x:\\tmq\\recovered\\XIMG%04d.JPG"		// Pattern for recovered files
 
 
-
 /**
  * Extracts file from damaged (allocation table of the) media to be inspected
  */
@@ -35,6 +35,7 @@ int CXExtrFile();
 
 /**
  *  saves the recovered data in a file
+ * recovered file will be saved in a new file: a different volume than the scaned one have to be selected as destination
  */
 int CXSaveBufferInNewFile(const char* szPat, int iPos, char* szBuf, DWORD dwBytes);
 
@@ -286,6 +287,7 @@ int CXExtrFile()
 
 }
 
+
 short CXReadSect(
                const char     	*_dsk,    		// disk to access
                char           	*_buff,         // buffer where sector will be stored
@@ -320,6 +322,7 @@ short CXReadSect(
     return 0;
     
 }
+
 
 int CXSaveBufferInNewFile(const char* szPat, int iPos, char* szBuf, DWORD dwBytes)
 {
@@ -367,7 +370,6 @@ int CXSaveBufferInNewFile(const char* szPat, int iPos, char* szBuf, DWORD dwByte
 	GlobalFree(szMsg);
 	return 0;
 }
-
 
 int CXLogPrint(const char* szPat, int iPos, const char* szWhat, BOOL bNew)
 {
@@ -438,6 +440,7 @@ inline bool CXFileExists(const char *szFNm)
 
 void TEST__CXSaveBufferInNewFile()
 {
+	
 	HANDLE		hBuf;
 	DWORD		dwBytes = 0xffff;
 	char 		*szBuf = new char;
@@ -454,7 +457,6 @@ void TEST__CXSaveBufferInNewFile()
 	CXSaveBufferInNewFile("d:\\tmq\\recovered\\RIMG%04d.JPG", 20, szBuf, dwBytes);
 	GlobalUnlock(hBuf);
 	CloseHandle(hBuf);		
-	// delete[] szBuf;		// GlobalUnlock() deletes it automatically???
 	
 }
 
