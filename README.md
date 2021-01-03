@@ -1,5 +1,6 @@
 # xtrFile
 
+
 Extract file from damaged/ defective media using JPEG markers. 
 Designed for Windows uses "CreateFile()" to read media as a single file. Intended for large and very large capacity media.
 Everything in a single file for simplicity; this is not a project but a code sample to be partially reused in another project
