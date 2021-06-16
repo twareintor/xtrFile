@@ -89,39 +89,38 @@ DWORD CXBytesToBeRead()
 
 int CXExtrFile()
 {
-	char				szDskRecPat[] = TESTRDSK;	// for debug only - where the packets of szBytes ...
-	char				szFilRecPat[] = TESTRIMG; // for release: the path and file pattern recovered
-	char				szTem[] = {	0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x45, 0x78, 0x69, 0x66, 0x00, // header
-									0xff, 0x01, 0xff, 0xfe, 	// Markers from FF01 till FFFE, whereas the
-									0xff, 0xd0, 0xff, 0xd9, 	// .. FFD0...FFD7, and FFD8, FFD9 are excluded
-									0xff, 0xd9 					// EOI
+	char		szDskRecPat[] = TESTRDSK;	// for debug only - where the packets of szBytes ...
+	char		szFilRecPat[] = TESTRIMG; // for release: the path and file pattern recovered
+	char		szTem[] = {	0xff, 0xd8, 0xff, 0xe0, 0x00, 0x10, 0x45, 0x78, 0x69, 0x66, 0x00, // header
+					0xff, 0x01, 0xff, 0xfe, 	// Markers from FF01 till FFFE, whereas the
+					0xff, 0xd0, 0xff, 0xd9, 	// .. FFD0...FFD7, and FFD8, FFD9 are excluded
+					0xff, 0xd9 					// EOI
 									};		// JPG - template
-	const char     		*_dsk = TESTDISF;    // disk to access
-	// const char			*_dsk = TESTDISK;		// test file to access, for debug phase...
-	// const char			*_dsk = TESTDISD;		// test file to access, for debug phase...
-	char				*szVol = new char;
-	LARGE_INTEGER		liPos;					// position	wherein the file pointer is to be moved
-	HANDLE				hBuf;					// handle to buffer input .... large buffer
-	char				*szBuf;					// bytes recovered from the affected disk opened as file
-	DWORD				dwBytes = MBP_PACK*MEGABYTE;// number of bytes to be read from the source	
-	DWORD				w = 0; 					// counts the bytes of the packet with lenght of "dwBytesRead" 
-	DWORD				dwBytesRead = 0;		// number of bytes read from teh source
-	char				*szMsg = new char;		// message for debug or release..3.
-	int					nMaxGiga = 1;			// maximum gigabytes, in our case, 8
-	int 				iRec = 0;				// counts the recovered files...
-	bool				bRec = FALSE;			// when TRUE, start recording, when FALSE again, stop recording
-	ULONG				u = 0;					// counts the bytes recorded into the recovery buffer
-	ULONG				u0 = 0;					// stores the last position of "u", if the recording is not complete
-												// 		at the end of the reading-input buffer "szBuf"
-												// 		WARNING!!! some adjustment required for no extra or minus byte! WARNING!!!
-	short 				nHAD = 0;				// stands for "number of bytes of header or application data"; 
-	short 				iHAD = 0;				// counts the bytes containing header or application data, 
-												// 		if iHAD<nHAD, we are inside such a packet and the EOI must be ignored!!!
-	    
-	DWORD				dwSectorsPerCluster = 0;
-    DWORD				dwBytesPerSector = 0;
-    DWORD				dwNumberOfFreeClusters = 0;
-    DWORD				dwTotalNumberOfClusters = 0;
+	const char     	*_dsk = TESTDISF;    // disk to access
+	// const char	*_dsk = TESTDISK;		// test file to access, for debug phase...
+	// const char	*_dsk = TESTDISD;		// test file to access, for debug phase...
+	char		*szVol = new char;
+	LARGE_INTEGER	liPos;					// position	wherein the file pointer is to be moved
+	HANDLE		hBuf;					// handle to buffer input .... large buffer
+	char		*szBuf;					// bytes recovered from the affected disk opened as file
+	DWORD		dwBytes = MBP_PACK*MEGABYTE;// number of bytes to be read from the source	
+	DWORD		w = 0; 					// counts the bytes of the packet with lenght of "dwBytesRead" 
+	DWORD		dwBytesRead = 0;		// number of bytes read from teh source
+	char		*szMsg = new char;		// message for debug or release..3.
+	int		nMaxGiga = 1;			// maximum gigabytes, in our case, 8
+	int 		iRec = 0;				// counts the recovered files...
+	bool		bRec = FALSE;			// when TRUE, start recording, when FALSE again, stop recording
+	ULONG		u = 0;					// counts the bytes recorded into the recovery buffer
+	ULONG		u0 = 0;					// stores the last position of "u", if the recording is not complete
+							// 		at the end of the reading-input buffer "szBuf"
+							// 		WARNING!!! some adjustment required for no extra or minus byte! WARNING!!!
+	short 		nHAD = 0;				// stands for "number of bytes of header or application data"; 
+	short 		iHAD = 0;				// counts the bytes containing header or application data, 
+							// 		if iHAD<nHAD, we are inside such a packet and the EOI must be ignored!!!
+	DWORD		dwSectorsPerCluster = 0;
+    	DWORD		dwBytesPerSector = 0;
+    	DWORD		dwNumberOfFreeClusters = 0;
+    	DWORD		dwTotalNumberOfClusters = 0;
 
 	// dwBytes = CXBytesToBeRead();
 	szMsg = (char*)GlobalAlloc(GPTR, MAX_PATH);
@@ -129,22 +128,22 @@ int CXExtrFile()
 	/*
 	memcpy(szVol, _dsk+4, strlen(_dsk)-4);	// just to get the letter of the volume, to transform "\\\\.\\F:" in "F:\\"
 	memset(szVol+strlen(szVol), '\\', 1);
-    if(GetDiskFreeSpace(szVol, &dwSectorsPerCluster, &dwBytesPerSector,	&dwNumberOfFreeClusters, &dwTotalNumberOfClusters))
+    	if(GetDiskFreeSpace(szVol, &dwSectorsPerCluster, &dwBytesPerSector,	&dwNumberOfFreeClusters, &dwTotalNumberOfClusters))
 	{
 		wsprintf(
-				szMsg, 
-				"Info about Volume %s:\r\n %d sectors per cluster\r\n%d bytes per sector\r\n%d free clusters\r\n%d total clusters", 
-				szVol, 
-				dwSectorsPerCluster, 
-				dwBytesPerSector, 
-				dwNumberOfFreeClusters, 
-				dwTotalNumberOfClusters
-				);
+			szMsg, 
+			"Info about Volume %s:\r\n %d sectors per cluster\r\n%d bytes per sector\r\n%d free clusters\r\n%d total clusters", 
+			szVol, 
+			dwSectorsPerCluster, 
+			dwBytesPerSector, 
+			dwNumberOfFreeClusters, 
+			dwTotalNumberOfClusters
+			);
 	}
 	else
 	{
 		FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, GetLastError(), 
-              MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), szMsg, 256, NULL);
+              	MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), szMsg, 256, NULL);
 		wsprintf(szMsg, "Error (%d) = \"%s\"", GetLastError(), szMsg);
 	}
 	MessageBox(NULL, szMsg, NULL, MB_OK);	// displays infos about the volume, or an error if infos are not available
